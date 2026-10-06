@@ -8,13 +8,14 @@ prerendered at build time; only the CMS draft preview renders on request.
 
 ```bash
 bun install
-cp .env.example .env.local   # fill in MEDIAN_API_KEY, MEDIAN_WEBSITE_ID, DATASET_ENDPOINT
+cp .env.example .env.local   # fill in MEDIAN_API_KEY
 bun dev
 ```
 
 ## How it renders
 
-- `src/lib/median.ts` creates the `Median` client from the environment.
+- `src/lib/median.ts` creates the `Median` client: the website id and page-service
+  endpoint are in the code, the API key comes from `MEDIAN_API_KEY`.
 - `src/app/[[...slug]]/page.tsx` prerenders every URL from `median.listPages()`:
   `median.resolveComponent(path)` reads the page and `ParametricPage` renders its
   blocks with the components in `src/lib/registry.tsx`.
