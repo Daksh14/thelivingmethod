@@ -4,11 +4,11 @@ import { ContentChanges } from "@/components/ContentChanges";
 import { median } from "@/lib/median";
 import { registry } from "@/lib/registry";
 
-// Every published URL is prerendered; a URL published since renders on its first
-// request, and an unknown one is a 404. A CMS change re-renders them (see
-// src/lib/publish-listener.ts), with `revalidate` as the fallback.
+// Every published URL is prerendered and stays cached until a publish: the
+// server listener (src/lib/publish-listener.ts) or the first tab to open a stale
+// page (ContentChanges) revalidates it. A URL published since renders on its
+// first request, and an unknown one is a 404.
 export const dynamicParams = true;
-export const revalidate = 60;
 
 export async function generateStaticParams() {
   const paths = await median.listPages();
@@ -26,7 +26,7 @@ export default async function Page({ params }: PageProps) {
   return (
     <>
       <ParametricPage page={page} registry={registry} />
-      <ContentChanges />
+      <ContentChanges since={page.publishedVersion} />
     </>
   );
 }

@@ -33,8 +33,10 @@ Published changes appear without a rebuild, whether or not anyone has the site o
 - Open tabs also re-render at once: `ContentChanges` listens to
   `/api/content-changes` (a relay of the same stream) and calls the
   `revalidatePublished` server action.
-- Pages also `revalidate` every 60 s, for the time a serverless instance is
-  suspended and not listening.
+- No timed revalidation: pages are only re-rendered after a publish, so they cost
+  no API reads in between. If the server listener was asleep during a publish, the
+  first tab to open a stale page triggers the refresh (its listener sends the
+  version it was rendered from).
 
 URLs published since the build render on their first request. Block **Appearance**
 settings from the CMS arrive as each component's `layout` prop (see `LivingHero`).
