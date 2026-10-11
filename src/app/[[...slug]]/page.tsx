@@ -6,8 +6,9 @@ import { registry } from "@/lib/registry";
 
 // Every published URL is prerendered; a URL published since renders on its first
 // request, and an unknown one is a 404. A CMS change re-renders them (see
-// ContentChanges).
+// src/lib/publish-listener.ts), with `revalidate` as the fallback.
 export const dynamicParams = true;
+export const revalidate = 60;
 
 export async function generateStaticParams() {
   const paths = await median.listPages();
